@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Messages } from '../enums';
 import {
   IBaseUtilsInterface,
+  INotSerializedData,
   TAppId,
   TData,
   TErrorMessage,
@@ -14,14 +15,23 @@ import {
 
 /** Родительский класс с базовыми методами SDK*/
 export class BaseUtils implements IBaseUtilsInterface {
-  readonly appId: TAppId;
+  readonly _appId: TAppId;
 
   /**
    * Айди приложения по умолчанию Winnum
    * @param {TAppId} appId - айди приложения
    * */
   constructor(appId: TAppId = 'Winnum') {
-    this.appId = appId;
+    this._appId = appId;
+  }
+
+  /**
+   * Геттер на appId
+   * @async
+   * @return {string} Вовращает значение appId
+   * */
+  get appId() {
+    return this._appId;
   }
 
   /**
@@ -53,6 +63,7 @@ export class BaseUtils implements IBaseUtilsInterface {
         console.log('xmlData: ', xmlData);
         console.log('parsedXml: ', parsedXml);
         console.log('items: ', items);
+        console.groupEnd();
       }
 
       return items;
@@ -97,7 +108,7 @@ export class BaseUtils implements IBaseUtilsInterface {
    * @param {TData} data - объект со значениями
    * @return {TSerialize} Возвращает строку в виде параметров для запроса
    * */
-  _serialize(data: TData): TSerialize {
+  _serialize(data: INotSerializedData): TSerialize {
     return Object.keys(data)
       .map(
         (keyName) =>
@@ -116,7 +127,9 @@ export class BaseUtils implements IBaseUtilsInterface {
 
     const arrayOfMatches = xmlText.match(regExpForError);
 
-    return arrayOfMatches.length > 0 ? arrayOfMatches[0] : Messages.parseError;
+    return arrayOfMatches && arrayOfMatches.length > 0
+      ? arrayOfMatches[0]
+      : Messages.parseError;
   }
 
   /**

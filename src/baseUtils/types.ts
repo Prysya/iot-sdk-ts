@@ -16,11 +16,15 @@ export type TErrorMessage = string;
 /**
 * Interfaces
 */
+export interface INotSerializedData {
+  [key:string]: number | string; 
+}
+
 export interface IBaseUtilsInterface {
   requestForXml(url: TUrl, data: TData): Promise<TItems>;
   _baseRequest(url: TUrl, data: TData): TAxiosPromiseResponse;
   _parseToXml(xmlText: TXmlText): TXmlParsedData;
-  _serialize(data: TData): TSerialize;
+  _serialize(data: INotSerializedData): TSerialize;
   _parseErrorMessage(xmlText: TXmlText): string;
   _getItems(xmlParsed: TXmlParsedData): TItems;
   setDebug(): void;
