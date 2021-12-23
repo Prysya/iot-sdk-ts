@@ -1,10 +1,15 @@
 {
   "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "declaration": true,
+    "strict": true,
     "outDir": "dist",
     "lib": ["es2016", "DOM"],
     "sourceMap": true
   },
   "include": [
     "src/**/*.ts"
-  ]
+  ],
+  "exclude": ["node_modules", "**/__tests__/*"]
 }
