@@ -1,8 +1,3 @@
-// import {hello} from '../src';
-//
-// test("hello", () => {
-//   expect(hello('foo')).toEqual('Hello foo')
-// })
 import {BaseUtils} from '../src/baseUtils'
 import {getDebugValue, mock} from './testUtils'
 
