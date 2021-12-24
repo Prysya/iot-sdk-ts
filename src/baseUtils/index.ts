@@ -41,9 +41,9 @@ export class BaseUtils {
    * */
   public set appId(appId) {
     if (typeof appId !== "string") {
-      new Error('AppId должен быть строкой');
+      throw new Error(Messages.appIdIsNotString);
     }
-    
+
     this._appId = appId;
   }
 
