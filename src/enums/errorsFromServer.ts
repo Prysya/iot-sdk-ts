@@ -1,3 +1,3 @@
-export enum Errors {
+export enum ErrorsFromServer {
   dataIsUndefined = 'Нет данных'
 }

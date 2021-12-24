@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { Messages } from '../enums';
-import { Errors } from '../enums/errors';
+import { Messages, ErrorsFromServer } from '../enums';
 import {
   INotSerializedData,
   IParsedJson,
@@ -101,7 +100,7 @@ export class BaseUtils {
       // Если массив пустой и сообщение не "Нет данных" то возвращает ошибку
       if (
         !response.data.hasOwnProperty('array') &&
-        response.data.message !== Errors.dataIsUndefined
+        response.data.message !== ErrorsFromServer.dataIsUndefined
       ) {
         const errorMessage = response.data.message;
 
