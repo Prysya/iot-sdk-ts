@@ -19,7 +19,7 @@ import {
 
 /** Родительский класс с базовыми методами SDK*/
 export class BaseUtils implements IBaseUtilsInterface {
-  readonly _appId: TAppId;
+  _appId: TAppId;
 
   /**
    * Айди приложения по умолчанию Winnum
@@ -31,11 +31,18 @@ export class BaseUtils implements IBaseUtilsInterface {
 
   /**
    * Геттер на appId
-   * @async
    * @return {string} Вовращает значение appId
    * */
   get appId() {
     return this._appId;
+  }
+
+  /**
+   * Сеттер на appId
+   * @param {TAppId} appId - айди приложения
+   * */
+  set appId(appId) {
+    this._appId = appId;
   }
 
   /**
