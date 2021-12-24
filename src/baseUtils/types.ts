@@ -32,16 +32,3 @@ export interface IParsedJson {
 export interface INotSerializedData {
   [key: string]: number | string;
 }
-
-export interface IBaseUtilsInterface {
-  requestForXml(url: TUrl, data: TData): Promise<TItems>;
-  requestForJSON(url: TUrl, data: TData): Promise<IParsedJson | TEmptyObject>;
-  _baseRequest(url: TUrl, data: TData): TAxiosPromiseResponse;
-  _parseToXml(xmlText: TXmlText): TXmlParsedData;
-  _serialize(data: INotSerializedData): TSerialize;
-  _parseErrorMessage(xmlText: TXmlText): string;
-  _getItems(xmlParsed: TXmlParsedData): TItems;
-  _parseJsonData(jsonData: TJsonData): IParsedJson | TEmptyObject;
-  setDebug(): void;
-  _checkDebug(): boolean;
-}

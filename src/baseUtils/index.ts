@@ -18,8 +18,8 @@ import {
 } from './types';
 
 /** Родительский класс с базовыми методами SDK*/
-export class BaseUtils implements IBaseUtilsInterface {
-  _appId: TAppId;
+export class BaseUtils {
+  private _appId: TAppId;
 
   /**
    * Айди приложения по умолчанию Winnum
@@ -33,7 +33,7 @@ export class BaseUtils implements IBaseUtilsInterface {
    * Геттер на appId
    * @return {string} Вовращает значение appId
    * */
-  get appId() {
+  public get appId() {
     return this._appId;
   }
 
@@ -41,7 +41,11 @@ export class BaseUtils implements IBaseUtilsInterface {
    * Сеттер на appId
    * @param {TAppId} appId - айди приложения
    * */
-  set appId(appId) {
+  public set appId(appId) {
+    if (typeof appId !== "string") {
+      new Error('AppId должен быть строкой');
+    }
+    
     this._appId = appId;
   }
 
@@ -52,7 +56,7 @@ export class BaseUtils implements IBaseUtilsInterface {
    * @param {TData} data - body запроса
    * @return {Promise<TItems>} Массив значений в ввиде ДОМ ноды, либо пустой массив если значение отсутствует
    * */
-  async requestForXml(url: TUrl, data: TData): Promise<TItems> {
+  public async requestForXml(url: TUrl, data: TData): Promise<TItems> {
     try {
       const response = await this._baseRequest(url, data);
 
@@ -91,7 +95,7 @@ export class BaseUtils implements IBaseUtilsInterface {
    * @return {Promise<IParsedJson>} Обьект значений значений в виде {[номер сигнала]: { event_ms: время сигнала в милисекундах, event_time: время в формате DD-MM-YYYY hh:mm:ss, value: последнее значение }}
    * @example {A2442: { event_ms: 1640324462000, event_time: "24.12.2021 08:41:02" value: "20.3" }}
    * */
-  async requestForJSON(url: TUrl, data: TData):  Promise<IParsedJson | TEmptyObject> {
+  public async requestForJSON(url: TUrl, data: TData):  Promise<IParsedJson | TEmptyObject> {
     try {
       const response = await this._baseRequest(url, data);
 
@@ -127,7 +131,7 @@ export class BaseUtils implements IBaseUtilsInterface {
    * @param {TData} data - body запроса
    * @return {TAxiosPromiseResponse} возвращает промис с результатом
    * */
-  async _baseRequest(url: TUrl, data: TData) {
+  private async _baseRequest(url: TUrl, data: TData) {
     try {
       return await axios.post(url, data, {
         headers: {
@@ -145,7 +149,7 @@ export class BaseUtils implements IBaseUtilsInterface {
    * @param {TXmlText} xmlText - XML в виде одной строки
    * @return {TXmlParsedData} Возвращает DOM элемент как XML
    * */
-  _parseToXml(xmlText: TXmlText): TXmlParsedData {
+  private _parseToXml(xmlText: TXmlText): TXmlParsedData {
     const parser = new DOMParser();
 
     return parser.parseFromString(xmlText, 'text/xml');
@@ -156,7 +160,7 @@ export class BaseUtils implements IBaseUtilsInterface {
    * @param {TData} data - объект со значениями
    * @return {TSerialize} Возвращает строку в виде параметров для запроса
    * */
-  _serialize(data: INotSerializedData): TSerialize {
+  private _serialize(data: INotSerializedData): TSerialize {
     return Object.keys(data)
       .map(
         (keyName) =>
@@ -170,7 +174,7 @@ export class BaseUtils implements IBaseUtilsInterface {
    * @param {TXmlText} xmlText - XML в виде одной строки
    * @return {TErrorMessage} Возвращает строку с сообщением об ошибке
    * */
-  _parseErrorMessage(xmlText: TXmlText): TErrorMessage {
+  private _parseErrorMessage(xmlText: TXmlText): TErrorMessage {
     const regExpForError = new RegExp(`(?<=">)(.*)(?=\<\/items\>)`, 'sg');
 
     const arrayOfMatches = xmlText.match(regExpForError);
@@ -185,13 +189,13 @@ export class BaseUtils implements IBaseUtilsInterface {
    * @param {TXmlParsedData} xmlParsedData - DOM XML документ
    * @return {TItems} Возвращает массив с элементами
    * */
-  _getItems(xmlParsedData: TXmlParsedData): TItems {
+  private _getItems(xmlParsedData: TXmlParsedData): TItems {
     const itemsList = xmlParsedData.querySelectorAll('item');
 
     return Array.from(itemsList);
   }
 
-  _parseJsonData(jsonData: TJsonData): IParsedJson | TEmptyObject {
+  private _parseJsonData(jsonData: TJsonData): IParsedJson | TEmptyObject {
     if (Array.isArray(jsonData)) {
       return jsonData.reduce<IParsedJson>(
         (obj, { event_ms, ascii, value, event_time }) => {
@@ -210,7 +214,7 @@ export class BaseUtils implements IBaseUtilsInterface {
    * Установить флаг для дебага
    * @param {TXmlParsedData} xmlParsedData - DOM XML документ
    * */
-  setDebug(): void {
+  public setDebug(): void {
     sessionStorage.setItem('debug', 'true');
   }
 
@@ -218,7 +222,7 @@ export class BaseUtils implements IBaseUtilsInterface {
    * Проверка на флаг дебага
    * @return {boolean} Возвращает булево значение
    * */
-  _checkDebug(): boolean {
+  private _checkDebug(): boolean {
     const debug = sessionStorage.getItem('debug');
 
     return debug !== null;
