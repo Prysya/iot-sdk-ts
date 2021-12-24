@@ -2,7 +2,6 @@ import axios from 'axios';
 import { Messages } from '../enums';
 import { Errors } from '../enums/errors';
 import {
-  IBaseUtilsInterface,
   INotSerializedData,
   IParsedJson,
   TAppId,
