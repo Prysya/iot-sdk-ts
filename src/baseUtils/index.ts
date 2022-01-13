@@ -3,7 +3,6 @@ import { Messages, ErrorsFromServer } from '../enums';
 import {
   INotSerializedData,
   IParsedJson,
-  TAppId,
   TData,
   TEmptyObject,
   TErrorMessage,
@@ -17,34 +16,18 @@ import {
 
 /** Родительский класс с базовыми методами SDK*/
 export class BaseUtils {
-  private _appId: TAppId;
+  private static instance: BaseUtils;
 
   /**
-   * Айди приложения по умолчанию Winnum
-   * @param {TAppId} appId - айди приложения
+   * Получение AppId из адресной строки
+   * @return {String} Строка с айди приложения
    * */
-  constructor(appId: TAppId = 'Winnum') {
-    this._appId = appId;
-  }
+  public getAppId(): string {
+    const { pathname } = window.location;
 
-  /**
-   * Геттер на appId
-   * @return {string} Вовращает значение appId
-   * */
-  public get appId() {
-    return this._appId;
-  }
+    const matcher = pathname.match(/^\/([\s\w\-\_]+)\//);
 
-  /**
-   * Сеттер на appId
-   * @param {TAppId} appId - айди приложения
-   * */
-  public set appId(appId) {
-    if (typeof appId !== "string") {
-      throw new Error(Messages.appIdIsNotString);
-    }
-
-    this._appId = appId;
+    return matcher && matcher[1] !== undefined ? matcher[1] : 'iot';
   }
 
   /**
@@ -193,6 +176,12 @@ export class BaseUtils {
     return Array.from(itemsList);
   }
 
+  /**
+   * Парсинг данных после pull запроса с получением ответа в виде JSON
+   * @param {TJsonData} jsonData - JSON данные
+   * @return {Object} Возвращает объект с данным по сигналам или пустой объект
+   * @example {A2442: { event_ms: 1640324462000, event_time: "24.12.2021 08:41:02" value: "20.3" }}
+   * */
   private _parseJsonData(jsonData: TJsonData): IParsedJson | TEmptyObject {
     if (Array.isArray(jsonData)) {
       return jsonData.reduce<IParsedJson>(
