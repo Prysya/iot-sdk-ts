@@ -3,7 +3,6 @@ import { AxiosResponse } from 'axios';
 /**
  * Types
  */
-export type TAppId = string;
 export type TUrl = string;
 export type TData = string;
 export type TXmlText = string;
