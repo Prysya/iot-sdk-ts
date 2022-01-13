@@ -1,5 +1,4 @@
 import { BaseUtils } from '../src/baseUtils';
-import { Messages } from '../src/enums';
 import { getDebugValue, mock } from './testUtils';
 
 describe('baseUtils tests', () => {
@@ -22,26 +21,15 @@ describe('baseUtils tests', () => {
     });
   });
 
-  describe('check getter / setter', () => {
-    it('check default appId', () => {
-      expect(baseUtils.appId).toBe('Winnum');
+  describe('check AppId getter', () => {
+    it('appId should be "iot" by default', () => {
+      expect(baseUtils.getAppId()).toBe('iot');
     });
 
-    it('check appId after setting new value', () => {
-      baseUtils.appId = 'iot';
+    it('appId should be "Winnum"', () => {
+      window.history.pushState({}, 'winnum', '/Winnum/');
 
-      expect(baseUtils.appId).toBe('iot');
-    });
-
-    it('check for error if appId is not string', () => {
-      expect.assertions(1);
-      
-      try {
-        // @ts-ignore
-        baseUtils.appId = 123
-      } catch (e) {
-        expect(e.message).toBe(Messages.appIdIsNotString);
-      }
-    });
+      expect(baseUtils.getAppId()).toBe('Winnum');
+    })
   });
 });
